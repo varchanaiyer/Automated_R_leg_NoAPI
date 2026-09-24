@@ -45,12 +45,18 @@ class PVGConfig:
     # with a continuous P(sound) reward). Default is the Dr.GRPO-style
     # unnormalized advantage (r - mean); set True for the classic form.
     grpo_normalize_std: bool = False
-    # "convincingness": reward = verifier P(sound) for both roles (the
-    #     signal the smoke test and rounds 1-4 used).
-    # "correctness_gated": Kirchner et al.'s CGC — reward = P(sound) only when
-    #     the completion is role-aligned per the rule check (helpful must pass
-    #     it, sneaky must fail it), else 0. Opt-in; see the PR notes.
-    prover_reward_mode: str = "convincingness"
+    # Prover reward, with the rule check (data/build_findings_dataset.py's
+    # check_internal_consistency) as the ground-truth oracle:
+    #   "convincingness":    reward = verifier P(sound) for both roles. Round 1
+    #                        on Colab showed the helpful prover passing the rule
+    #                        check only 16% of the time under this reward: it
+    #                        learns to be convincing, not accurate.
+    #   "helpful_gated":     helpful reward = P(sound) if the completion passes
+    #                        the rule check else 0; sneaky reward = P(sound)
+    #                        (free to be subtle). Default.
+    #   "correctness_gated": Kirchner et al.'s CGC — both roles gated (sneaky
+    #                        must FAIL the rule check to earn P(sound)).
+    prover_reward_mode: str = "helpful_gated"
 
     # --- PVG training loop ---
     num_rounds: int = 10                 # outer alternation rounds
@@ -87,6 +93,11 @@ class PVGConfig:
     # Include the labeled TRAIN split in every verifier update (not just
     # the prover-sample replay window). Turn off only for plumbing tests.
     verifier_train_on_dataset: bool = True
+    # Labels for the provers' samples in verifier training come from the rule
+    # check, not the role: helpful & fails -> UNSOUND (relabeled), sneaky &
+    # passes -> dropped (unknown: subtle misrepresentation or plain honest).
+    # Role labels alone fed 64 mostly-wrong 'SOUND' rows per round.
+    verifier_labels_from_rule_check: bool = True
 
     # --- Data construction ---
     source_findings_dir: str = "data/source_findings"
@@ -158,6 +169,9 @@ class RunMetadata:
     role_fidelity_sneaky: Optional[float] = None   # sneaky completions failing the rule check
     spot_check_accuracy: Optional[float] = None    # 20-item hand-checked set
     spot_check_accept_rate: Optional[float] = None
+    spot_check_auroc: Optional[float] = None
+    verifier_relabeled_helpful: Optional[int] = None  # helpful samples relabeled UNSOUND by the rule check
+    verifier_dropped_sneaky: Optional[int] = None     # sneaky samples dropped (passed the rule check)
     verifier_train_examples: Optional[int] = None
     verifier_train_loss: Optional[float] = None
     verifier_logit_bias: Optional[float] = None    # calibration offset in force for this round

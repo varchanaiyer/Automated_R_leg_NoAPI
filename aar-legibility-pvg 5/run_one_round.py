@@ -176,9 +176,18 @@ def main() -> int:
         print("Initializing sneaky prover fresh (round 1)...")
         sneaky_prover_state = load_prover(cfg, cfg.prover_model)
 
+    samples: list = []
     metadata = run_single_round(next_round, honest_records, helpful_prover_state, sneaky_prover_state,
-                                cfg, heldout_rows, spot_rows, seed=cfg.seed)
+                                cfg, heldout_rows, spot_rows, seed=cfg.seed, samples_out=samples)
     metadata.elapsed_s = round(time.time() - t0, 1)
+
+    # Every prover sample of the round, readable and reusable by
+    # eval/human_eval_harness.py build --dataset <this file>.
+    samples_dir = ckpt / "samples"
+    samples_dir.mkdir(parents=True, exist_ok=True)
+    with open(samples_dir / f"round_{next_round:02d}.jsonl", "w") as f:
+        for s in samples:
+            f.write(json.dumps(s) + "\n")
 
     row = json.dumps(vars(metadata))
     with open(history_path, "a") as f:
