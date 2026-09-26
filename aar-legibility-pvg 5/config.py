@@ -19,6 +19,25 @@ class PVGConfig:
     #       trained via GRPO against the verifier's score, mirroring
     #       Kirchner et al.'s actual method (see LIMITATIONS.md #7).
     use_finetunable_prover: bool = True
+    # --- Frozen API prover (use_finetunable_prover=False) ---
+    # The real AAR is a frozen Claude model, so this mode is the one that
+    # matches LIMITATIONS.md #5: Claude writes the helpful and sneaky
+    # findings from the same two prompts, its weights never change, and only
+    # the verifier trains. Calls go through OpenRouter's OpenAI-compatible
+    # chat endpoint (the key we have is an OpenRouter key). Completions are
+    # cached on disk under the checkpoint dir, keyed by seed/round/role/
+    # record/index, so a resumed round never re-spends.
+    prover_api_model: str = "anthropic/claude-opus-5"
+    prover_api_url: str = "https://openrouter.ai/api/v1/chat/completions"
+    prover_api_key_env: str = "OPENROUTER_API_KEY"
+    prover_api_max_tokens: int = 1200          # includes the model's reasoning tokens
+    prover_api_reasoning_effort: str = "low"   # OpenRouter unified `reasoning.effort`; "" to omit
+    # Same length band for both roles: in a 16-sample check Claude's honest
+    # write-ups averaged 226 words and its sneaky ones 146, a shortcut a small
+    # verifier could learn instead of checking the numbers.
+    prover_api_system: str = ("Reply with the finding write-up only: one paragraph of plain prose, "
+                              "between 110 and 160 words, no heading, no preamble, no bullet points, "
+                              "no closing remark.")
     # Small model so a free-tier Colab T4 (16GB) can hold both prover
     # adapters + the verifier at once.
     prover_model: str = "Qwen/Qwen2.5-1.5B-Instruct"

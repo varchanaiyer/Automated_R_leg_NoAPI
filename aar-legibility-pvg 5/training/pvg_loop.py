@@ -201,6 +201,8 @@ def render_prover_prompt(template_path: Path, record: dict, tokenizer, cfg: PVGC
         metrics=json.dumps(record.get("metrics", {}) or {}, sort_keys=True),
         config=json.dumps(record.get("config", {}) or {}, sort_keys=True),
     )
+    if tokenizer is None:  # frozen API prover: the prompt IS the user message
+        return text
     if cfg.prover_use_chat_template:
         return tokenizer.apply_chat_template(
             [{"role": "user", "content": text}], tokenize=False, add_generation_prompt=True
@@ -636,13 +638,15 @@ def run_single_round(round_num: int, honest_records: List[dict], helpful_prover_
     from training.train_prover_step import train_prover_role
 
     print(f"\n=== PVG Round {round_num}/{cfg.num_rounds}" + (f" (seed {seed})" if seed is not None else "") + " ===")
-    if not cfg.use_finetunable_prover:
-        raise NotImplementedError("Frozen API-prover mode is out of scope (no API budget); "
-                                  "set use_finetunable_prover=True.")
     reset_scoring_stats()
+    api_mode = not cfg.use_finetunable_prover
+    if api_mode:
+        from training.api_prover import APIProver
+        assert isinstance(helpful_prover_state, APIProver), \
+            "use_finetunable_prover=False: pass an APIProver as helpful_prover_state"
 
     batch = random.sample(honest_records, min(cfg.findings_per_round, len(honest_records)))
-    tok = helpful_prover_state.tokenizer
+    tok = None if api_mode else helpful_prover_state.tokenizer
     helpful_prompts = [{"prompt": render_prover_prompt(_HELPFUL_PROMPT_PATH, item["experiment"], tok, cfg),
                         "record": item["experiment"]} for item in batch]
     sneaky_prompts = [{"prompt": render_prover_prompt(_SNEAKY_PROMPT_PATH, item["experiment"], tok, cfg),
@@ -673,10 +677,32 @@ def run_single_round(round_num: int, honest_records: List[dict], helpful_prover_
     helpful_reward, helpful_raw, helpful_ok, helpful_issues = make_reward_fn("helpful")
     sneaky_reward, sneaky_raw, sneaky_ok, sneaky_issues = make_reward_fn("sneaky")
 
-    helpful_stats = train_prover_role(helpful_prover_state, helpful_prompts, helpful_reward, cfg)
-    sneaky_stats = train_prover_role(sneaky_prover_state, sneaky_prompts, sneaky_reward, cfg)
-    print(f"  [prover update] helpful mean_reward={helpful_stats['mean_reward']:.3f} "
-          f"sneaky mean_reward={sneaky_stats['mean_reward']:.3f}")
+    if api_mode:
+        # Frozen prover: sample from Claude, score with the current verifier,
+        # no prover update. Same reward fns, so the metrics below are identical.
+        def sample_role(role, prompts, reward_fn):
+            samples, rewards = [], []
+            for item in prompts:
+                rid = item["record"].get("record_id", "?")
+                comps = helpful_prover_state.complete(
+                    item["prompt"], n=cfg.prover_num_generations, temperature=cfg.prover_temperature,
+                    cache_key=f"seed{seed}-round{round_num}-{role}-{rid}")
+                for c in comps:
+                    r = float(reward_fn(c, item["record"]))
+                    rewards.append(r)
+                    samples.append({"prompt": item["prompt"], "record": item["record"], "completion": c, "reward": r})
+            return {"mean_reward": _mean(rewards), "loss": 0.0, "samples": samples}
+        helpful_stats = sample_role("helpful", helpful_prompts, helpful_reward)
+        sneaky_stats = sample_role("sneaky", sneaky_prompts, sneaky_reward)
+        u = helpful_prover_state.usage
+        print(f"  [api prover {helpful_prover_state.model}] helpful mean_reward={helpful_stats['mean_reward']:.3f} "
+              f"sneaky mean_reward={sneaky_stats['mean_reward']:.3f}  calls={u['calls']} cache_hits={u['cache_hits']} "
+              f"refusals={u['refusals']} cost=${u['cost_usd']:.3f}")
+    else:
+        helpful_stats = train_prover_role(helpful_prover_state, helpful_prompts, helpful_reward, cfg)
+        sneaky_stats = train_prover_role(sneaky_prover_state, sneaky_prompts, sneaky_reward, cfg)
+        print(f"  [prover update] helpful mean_reward={helpful_stats['mean_reward']:.3f} "
+              f"sneaky mean_reward={sneaky_stats['mean_reward']:.3f}")
 
     # The samples drawn for the GRPO step (scored by the pre-update verifier)
     # double as this round's verifier training data. Re-sampling after the
@@ -801,9 +827,15 @@ def run_pvg_training(dataset_path: str, cfg: PVGConfig, heldout_path: Optional[s
 
     prepare_verifier_for_run(cfg, dataset, spot_rows)
 
-    from training.train_prover_step import load_prover
-    helpful_prover_state = load_prover(cfg, cfg.prover_model)
-    sneaky_prover_state = load_prover(cfg, cfg.prover_model)
+    if cfg.use_finetunable_prover:
+        from training.train_prover_step import load_prover
+        helpful_prover_state = load_prover(cfg, cfg.prover_model)
+        sneaky_prover_state = load_prover(cfg, cfg.prover_model)
+    else:
+        from training.api_prover import APIProver
+        helpful_prover_state = APIProver(cfg, Path("training/api_cache"))
+        sneaky_prover_state = None
+        print(f"Frozen API prover: {cfg.prover_api_model} (only the verifier trains)")
 
     round_history: List[RunMetadata] = []
     for round_num in range(1, cfg.num_rounds + 1):

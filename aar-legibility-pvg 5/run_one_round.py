@@ -163,18 +163,29 @@ def main() -> int:
         print(f"Resumed replay buffer with {len(pvg_loop._REPLAY_BUFFER)} examples.")
 
     # --- Provers ---
-    if helpful_dir.exists():
+    api_prover = None
+    if not cfg.use_finetunable_prover:
+        from training.api_prover import APIProver
+        api_prover = APIProver(cfg, ckpt / "api_cache")
+        usage_path = ckpt / "api_usage.json"
+        if usage_path.exists():
+            api_prover.usage.update(json.loads(usage_path.read_text()))
+        helpful_prover_state, sneaky_prover_state = api_prover, None
+        print(f"Frozen API prover: {cfg.prover_api_model} (only the verifier trains); "
+              f"cumulative cost so far ${api_prover.usage['cost_usd']:.3f}")
+    elif helpful_dir.exists():
         print("Resuming helpful prover from checkpoint...")
         helpful_prover_state = load_prover_checkpoint(cfg, cfg.prover_model, helpful_dir)
     else:
         print("Initializing helpful prover fresh (round 1)...")
         helpful_prover_state = load_prover(cfg, cfg.prover_model)
-    if sneaky_dir.exists():
-        print("Resuming sneaky prover from checkpoint...")
-        sneaky_prover_state = load_prover_checkpoint(cfg, cfg.prover_model, sneaky_dir)
-    else:
-        print("Initializing sneaky prover fresh (round 1)...")
-        sneaky_prover_state = load_prover(cfg, cfg.prover_model)
+    if cfg.use_finetunable_prover:
+        if sneaky_dir.exists():
+            print("Resuming sneaky prover from checkpoint...")
+            sneaky_prover_state = load_prover_checkpoint(cfg, cfg.prover_model, sneaky_dir)
+        else:
+            print("Initializing sneaky prover fresh (round 1)...")
+            sneaky_prover_state = load_prover(cfg, cfg.prover_model)
 
     samples: list = []
     metadata = run_single_round(next_round, honest_records, helpful_prover_state, sneaky_prover_state,
@@ -201,8 +212,11 @@ def main() -> int:
         return 3
 
     print("Saving checkpoint...")
-    save_prover(helpful_prover_state, helpful_dir)
-    save_prover(sneaky_prover_state, sneaky_dir)
+    if api_prover is not None:
+        api_prover.save_usage(ckpt / "api_usage.json")
+    else:
+        save_prover(helpful_prover_state, helpful_dir)
+        save_prover(sneaky_prover_state, sneaky_dir)
     save_verifier_checkpoint(cfg, verifier_dir)
     replay_path.write_text(json.dumps(pvg_loop._REPLAY_BUFFER))
     state_path.write_text(json.dumps({"next_round": next_round + 1, "seed": cfg.seed,
