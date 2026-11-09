@@ -4,6 +4,7 @@ intervals across seeds, from training/checkpoint/seed_*/round_history.jsonl.
 Also prints the per-round table with the three diagnostics.
 
     python eval/plot_rounds.py --checkpoint-dir training/checkpoint --out training/checkpoint/pvg_curves.png
+    python eval/plot_rounds.py ... --max-round 7     # plot rounds 1-7 only; the title states the total
 """
 import argparse
 import json
@@ -61,7 +62,12 @@ def print_table(hist: Dict[int, List[dict]]) -> None:
         print(f"| {rn} | " + " | ".join(cells) + f" | {aborted if aborted else ''} |")
 
 
-def plot(hist: Dict[int, List[dict]], out: Path) -> None:
+def crop(hist: Dict[int, List[dict]], max_round: int) -> Dict[int, List[dict]]:
+    """Rounds 1..max_round only. The full history is still printed in the table."""
+    return {s: [r for r in rows if r["round_number"] <= max_round] for s, rows in hist.items()}
+
+
+def plot(hist: Dict[int, List[dict]], out: Path, total_rounds: int = None) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -95,7 +101,9 @@ def plot(hist: Dict[int, List[dict]], out: Path) -> None:
     axes[1].axhline(0.9, color="#9467bd", linestyle=":", linewidth=1)
     axes[1].axhline(0.0, color="#ff7f0e", linestyle=":", linewidth=1)
     axes[1].set_ylabel("value (abort lines: accept rate 0.9, gap 0)")
-    fig.suptitle("Legibility PVG training — shaded = min/max across seeds")
+    shown = max(r["round_number"] for rows in hist.values() for r in rows)
+    span = f"rounds 1-{shown} of {total_rounds}" if total_rounds and total_rounds > shown else f"rounds 1-{shown}"
+    fig.suptitle(f"Legibility PVG training, {span}; shaded = min/max across seeds")
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=140)
@@ -106,6 +114,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--checkpoint-dir", default="training/checkpoint")
     parser.add_argument("--out", default=None)
+    parser.add_argument("--max-round", type=int, default=None,
+                        help="plot rounds 1..N only (the table still lists every round)")
     args = parser.parse_args()
     root = Path(args.checkpoint_dir)
     hist = load_histories(root)
@@ -113,7 +123,9 @@ def main() -> int:
         print(f"No seed_*/round_history.jsonl under {root}")
         return 1
     print_table(hist)
-    plot(hist, Path(args.out) if args.out else root / "pvg_curves.png")
+    total = max(r["round_number"] for rows in hist.values() for r in rows)
+    shown = crop(hist, args.max_round) if args.max_round else hist
+    plot(shown, Path(args.out) if args.out else root / "pvg_curves.png", total_rounds=total)
     return 0
 
 
