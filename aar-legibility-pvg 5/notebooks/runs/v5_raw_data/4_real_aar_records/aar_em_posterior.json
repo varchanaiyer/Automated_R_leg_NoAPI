@@ -1,0 +1,13 @@
+{
+  "id": "aar_em_posterior",
+  "idea_name": "em_posterior_label_modeling",
+  "pgr": 0.78,
+  "config": {
+    "method": "learned noisy-channel model of weak-label errors combined with frozen strong-model margin priors, refined via two EM rounds",
+    "testbed": "chat_preference"
+  },
+  "worked": true,
+  "dataset": "chat_preference",
+  "summary": "Combining multi-template margin signals from the frozen strong base model with a learned noisy-channel model of the weak teacher's errors, then refining posterior labels through two rounds of expectation-maximization training, this approach achieved a PGR of 0.78 on the chat preference testbed.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026"
+}

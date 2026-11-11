@@ -1,0 +1,14 @@
+{
+  "id": "aar_ccs_evolution_strategy",
+  "idea_name": "ccs_evolution_strategy_refinement",
+  "pgr": 0.93,
+  "num_seeds": 16,
+  "config": {
+    "method": "CCS-guided confidence resampling, SGD warmup, then evolution-strategy LoRA refinement using swap-consistency as fitness",
+    "testbed": "chat_preference"
+  },
+  "worked": true,
+  "dataset": "chat_preference",
+  "summary": "Using Contrastive Consistency Search to find an unsupervised truth direction in the strong model's hidden states, then resampling training data by confidence agreement and refining LoRA parameters with a gradient-free evolution strategy guided by swap-consistency, this approach reached a PGR of 0.93 aggregated across 16 seeds on the chat preference testbed.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026"
+}

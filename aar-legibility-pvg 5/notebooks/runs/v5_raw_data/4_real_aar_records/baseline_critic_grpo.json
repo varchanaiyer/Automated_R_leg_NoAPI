@@ -1,0 +1,22 @@
+{
+  "id": "baseline_critic_grpo",
+  "idea_name": "critic_training",
+  "pgr": -0.04,
+  "pgr_se": 0.04,
+  "num_seeds": 5,
+  "transfer_acc": 0.52,
+  "weak_acc": 0.53,
+  "strong_acc": 0.73,
+  "config": {
+    "method": "training a critic with GRPO (KL penalty 0.02, 50 steps) on weak demonstrations, then using its judgments to label data for the strong student",
+    "weak_model": "Qwen1.5-0.5B-Chat",
+    "strong_model": "Qwen3-4B-Base",
+    "testbed": "chat_preference",
+    "grpo_kl_penalty": 0.02,
+    "grpo_max_steps": 50
+  },
+  "worked": false,
+  "summary": "Training a GRPO critic on weak demonstrations and using it to label data for Qwen3-4B-Base gave a PGR of -0.04 (se 0.04) across 5 seeds on chat preference; transfer accuracy was 0.52, slightly below the weak supervisor's 0.53. The critic did not help in this setting.",
+  "source": "safety-research/automated-w2s-research, cache_results.tar.gz (chat-0115 runs); metrics computed from the per-seed JSONs, write-up by Claude",
+  "notes": "Human-run baseline. Per-seed PGR: -0.12, -0.10, 0.06, 0.07, -0.11."
+}

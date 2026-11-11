@@ -1,0 +1,16 @@
+{
+  "id": "aar_directed_headline",
+  "idea_name": "nine_parallel_directed_aars",
+  "pgr": 0.97,
+  "config": {
+    "method": "nine parallel automated researchers (Claude Opus 4.6), each seeded with a distinct research direction, running for 5 days (800 cumulative hours)",
+    "testbed": "chat_preference",
+    "num_researchers": 9,
+    "days": 5,
+    "cumulative_hours": 800
+  },
+  "worked": true,
+  "summary": "Running 9 automated researchers in parallel, each seeded with a different research direction, the best idea reached a PGR of 0.97 on the chat preference testbed within 5 days and 800 cumulative hours.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026",
+  "notes": "Headline result of the AAR system as a whole, not a single idea. Seed count and SE not reported."
+}

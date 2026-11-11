@@ -1,0 +1,19 @@
+{
+  "id": "baseline_ue_zeroshot",
+  "idea_name": "ue_zeroshot",
+  "pgr": 0.03,
+  "pgr_se": 0.02,
+  "num_seeds": 4,
+  "transfer_acc": 0.53,
+  "weak_acc": 0.53,
+  "strong_acc": 0.73,
+  "config": {
+    "method": "zero-shot unsupervised elicitation: the strong base model's own label prior, with no weak labels",
+    "strong_model": "Qwen3-4B-Base",
+    "testbed": "chat_preference"
+  },
+  "worked": false,
+  "summary": "Using the zero-shot label prior of Qwen3-4B-Base with no weak labels, PGR was 0.03 (se 0.02) over 4 seeds on chat preference, with transfer accuracy of 0.53, essentially no better than the weak supervisor. With only 4 seeds this result should be treated as preliminary.",
+  "source": "safety-research/automated-w2s-research, cache_results.tar.gz (chat-0115 runs); metrics computed from the per-seed JSONs, write-up by Claude",
+  "notes": "Human-run baseline. The 4 result files all record seed=42 but have different results; treated as 4 runs. Per-run PGR: -0.04, 0.07, 0.03, 0.04."
+}

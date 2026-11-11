@@ -1,0 +1,13 @@
+{
+  "id": "aar_mdl_curriculum",
+  "idea_name": "mdl_curriculum_training",
+  "pgr": 0.68,
+  "config": {
+    "method": "two-phase curriculum: train on most-confident half first, then continue on full data at lower learning rate",
+    "testbed": "chat_preference"
+  },
+  "worked": true,
+  "dataset": "chat_preference",
+  "summary": "A two-phase curriculum that first trains exclusively on the most confidently weak-labeled half of the data, then continues from the same checkpoint onto the full dataset at a reduced learning rate to preserve early structure while generalizing to noisier examples, this approach achieved a PGR of 0.68 on the chat preference testbed.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026"
+}

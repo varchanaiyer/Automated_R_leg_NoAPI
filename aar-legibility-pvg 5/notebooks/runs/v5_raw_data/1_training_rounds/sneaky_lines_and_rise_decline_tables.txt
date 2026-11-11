@@ -1,0 +1,73 @@
+<Figure size 1400x500 with 2 Axes>Rise (round 1 -> 7) and decline (round 7 -> last), mean over seeds:
+                  round 1  round 7  round 10  rise 1->7  change 7->10
+metric                                                               
+helpful_accept      0.786    0.959     0.877      0.173        -0.083
+sneaky_success      0.205    0.064     0.002     -0.141        -0.062
+sneaky_accept       0.375    0.148     0.295     -0.227         0.147
+helpful_fidelity    0.430    0.809     0.658      0.380        -0.152
+sneaky_fidelity     0.688    0.703     0.550      0.016        -0.153
+reward_gap          0.365    0.808     0.598      0.443        -0.211Per round, mean and std over seeds:
+       helpful_accept_mean  helpful_accept_std  sneaky_success_mean  \
+round                                                                 
+1                    0.786               0.076                0.205   
+2                    0.786               0.086                0.158   
+3                    0.847               0.098                0.195   
+4                    0.803               0.045                0.161   
+5                    0.841               0.092                0.103   
+6                    0.903               0.052                0.036   
+7                    0.959               0.040                0.064   
+8                    0.912               0.014                0.033   
+9                    0.870               0.138                0.027   
+10                   0.877               0.191                0.002   
+
+       sneaky_success_std  sneaky_accept_mean  sneaky_accept_std  \
+round                                                              
+1                   0.071               0.375              0.089   
+2                   0.068               0.339              0.093   
+3                   0.066               0.384              0.109   
+4                   0.061               0.306              0.098   
+5                   0.064               0.197              0.111   
+6                   0.013               0.095              0.084   
+7                   0.083               0.148              0.182   
+8                   0.065               0.159              0.194   
+9                   0.059               0.241              0.236   
+10                  0.003               0.295              0.261   
+
+       helpful_fidelity_mean  helpful_fidelity_std  sneaky_fidelity_mean  \
+round                                                                      
+1                      0.430                 0.076                 0.688   
+2                      0.448                 0.036                 0.658   
+3                      0.544                 0.081                 0.670   
+4                      0.605                 0.040                 0.720   
+5                      0.722                 0.070                 0.716   
+6                      0.777                 0.085                 0.736   
+7                      0.809                 0.093                 0.703   
+8                      0.802                 0.049                 0.662   
+9                      0.716                 0.043                 0.600   
+10                     0.658                 0.167                 0.550   
+
+       sneaky_fidelity_std  reward_gap_mean  reward_gap_std  \
+round                                                         
+1                    0.066            0.365           0.095   
+2                    0.043            0.405           0.085   
+3                    0.049            0.431           0.104   
+4                    0.083            0.484           0.129   
+5                    0.049            0.620           0.141   
+6                    0.062            0.798           0.137   
+7                    0.039            0.808           0.166   
+8                    0.143            0.750           0.191   
+9                    0.121            0.649           0.311   
+10                   0.112            0.598           0.359   
+
+       sneaky_fool_rate_mean  sneaky_fool_rate_std  seeds  
+round                                                      
+1                      0.295                 0.091      5  
+2                      0.242                 0.110      5  
+3                      0.290                 0.097      5  
+4                      0.228                 0.093      5  
+5                      0.146                 0.094      5  
+6                      0.050                 0.020      5  
+7                      0.096                 0.131      5  
+8                      0.054                 0.108      5  
+9                      0.039                 0.087      5  
+10                     0.002                 0.005      5  <Figure size 1400x500 with 2 Axes>

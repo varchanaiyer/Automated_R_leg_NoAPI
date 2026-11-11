@@ -1,0 +1,13 @@
+{
+  "id": "aar_overlap_density",
+  "idea_name": "overlap_density_data_selection",
+  "pgr": 0.75,
+  "config": {
+    "method": "selects training examples by alignment between weak labels and strong-model embedding geometry, then fine-tunes on the top-scoring half",
+    "testbed": "chat_preference"
+  },
+  "worked": true,
+  "dataset": "chat_preference",
+  "summary": "Scoring training examples by how well their weak labels align with the strong model's frozen embedding geometry, using probe predictability, neighbor smoothness, local density, and entropy signals, then fine-tuning only on the top half of examples by this composite score, this approach reached a PGR of 0.75 on the chat preference testbed.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026"
+}

@@ -1,0 +1,15 @@
+eval_set,n,method,accuracy,auroc,sneaky_rejected,honest_wrongly_rejected,sec_per_finding
+heldout_100,100,rule_check,0.92,0.92,0.84,0,
+heldout_100,100,qwen_1.5b_zero_shot,0.5,0.608,0.12,0.12,0.042
+heldout_100,100,qwen_7b_judge,0.81,0.912,0.9,0.28,0.084
+heldout_100,100,qwen_32b_judge_4bit,0.89,0.962,0.84,0.06,0.398
+heldout_100,100,pvg_verifier_round7_mean5seeds,0.952,0.992,,,
+heldout_48,48,rule_check,0.833,0.833,0.667,0,
+heldout_48,48,qwen_1.5b_zero_shot,0.458,0.552,0.083,0.167,0.037
+heldout_48,48,qwen_7b_judge,0.792,0.899,0.875,0.292,0.082
+heldout_48,48,qwen_32b_judge_4bit,0.875,0.979,0.75,0,0.398
+spot_20,20,rule_check,0.85,0.85,0.7,0,
+spot_20,20,qwen_1.5b_zero_shot,0.55,0.42,0.1,0,0.038
+spot_20,20,qwen_7b_judge,0.7,0.81,0.7,0.3,0.069
+spot_20,20,qwen_32b_judge_4bit,0.95,0.99,0.9,0,0.355
+spot_20,20,pvg_verifier_round7_mean5seeds,0.9,0.968,,,

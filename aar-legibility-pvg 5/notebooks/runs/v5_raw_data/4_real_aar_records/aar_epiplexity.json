@@ -1,0 +1,13 @@
+{
+  "id": "aar_epiplexity",
+  "idea_name": "epiplexity_adaptive_smoothing",
+  "pgr": 0.62,
+  "config": {
+    "method": "measures per-sample loss drop over training as a learnability signal, applies adaptive label smoothing weighted by that signal",
+    "testbed": "chat_preference"
+  },
+  "worked": true,
+  "dataset": "chat_preference",
+  "summary": "Measuring the drop in per-sample training loss between first and last encounter as a signal of how learnable each example is, then applying adaptive label smoothing that trusts high-signal examples fully and softens low-signal examples toward uncertainty, this approach reached a PGR of 0.62 on the chat preference testbed.",
+  "source": "Wen, Qiu, et al., 'Automated Weak-to-Strong Researcher', Anthropic Alignment Science Blog, 2026"
+}

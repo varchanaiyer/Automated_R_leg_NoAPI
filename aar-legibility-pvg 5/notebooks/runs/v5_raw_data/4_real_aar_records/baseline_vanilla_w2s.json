@@ -1,0 +1,20 @@
+{
+  "id": "baseline_vanilla_w2s",
+  "idea_name": "vanilla_w2s",
+  "pgr": 0.2,
+  "pgr_se": 0.05,
+  "num_seeds": 5,
+  "transfer_acc": 0.57,
+  "weak_acc": 0.53,
+  "strong_acc": 0.73,
+  "config": {
+    "method": "fine-tuning the strong student directly on the weak teacher's labels",
+    "weak_model": "Qwen1.5-0.5B-Chat",
+    "strong_model": "Qwen3-4B-Base",
+    "testbed": "chat_preference"
+  },
+  "worked": false,
+  "summary": "Fine-tuning Qwen3-4B-Base directly on the labels of Qwen1.5-0.5B-Chat reached a PGR of 0.20 (se 0.05) across 5 seeds on the chat preference testbed, with transfer accuracy of 0.57 against a weak-supervisor accuracy of 0.53 and a strong ceiling of 0.73.",
+  "source": "safety-research/automated-w2s-research, cache_results.tar.gz (chat-0115 runs); metrics computed from the per-seed JSONs, write-up by Claude",
+  "notes": "Human-run baseline. Per-seed PGR: 0.37, 0.21, 0.12, 0.19, 0.13."
+}

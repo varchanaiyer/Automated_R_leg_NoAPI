@@ -1,0 +1,22 @@
+{
+  "id": "baseline_confident_labels",
+  "idea_name": "train_only_on_confident_labels",
+  "pgr": 0.23,
+  "pgr_se": 0.05,
+  "num_seeds": 5,
+  "transfer_acc": 0.58,
+  "weak_acc": 0.53,
+  "strong_acc": 0.73,
+  "config": {
+    "method": "training the strong student only on weak labels with confidence above 0.75 or below 0.25",
+    "weak_model": "Qwen1.5-0.5B-Chat",
+    "strong_model": "Qwen3-4B-Base",
+    "testbed": "chat_preference",
+    "conf_high": 0.75,
+    "conf_low": 0.25
+  },
+  "worked": false,
+  "summary": "Training Qwen3-4B-Base only on the weak labels where Qwen1.5-0.5B-Chat was confident (above 0.75 or below 0.25) gave a PGR of 0.23 (se 0.05) over 5 seeds on chat preference; transfer accuracy was 0.58 (weak supervisor 0.53, strong ceiling 0.73). Individual seeds ranged widely, so this is only a modest gain over weak supervision.",
+  "source": "safety-research/automated-w2s-research, cache_results.tar.gz (chat-0115 runs); metrics computed from the per-seed JSONs, write-up by Claude",
+  "notes": "Human-run baseline; matches the blog's 'best human PGR of 0.23'. Per-seed PGR: 0.40, 0.22, 0.21, 0.27, 0.07."
+}
