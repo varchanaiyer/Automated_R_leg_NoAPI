@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"i.e. transfer accuracy 0.82\" METRIC: transfer_acc ISSUE: Transfer accuracy is 0.69; 0.82 is the strong ceiling accuracy.\nQUOTE: \"evaluated on cosmos_qa\" METRIC: n/a ISSUE: No dataset is recorded in the config, so the dataset claim is unsupported.", "cost": 0.00754, "model": "anthropic/claude-opus-5"}

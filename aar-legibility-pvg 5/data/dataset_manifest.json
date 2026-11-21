@@ -1,0 +1,43 @@
+{
+  "seed": 42,
+  "pairs_total": 120,
+  "pairs_real": 5,
+  "pairs_synthetic": 115,
+  "pairs_sparse_metrics": 39,
+  "rows_train": 192,
+  "rows_heldout": 48,
+  "heldout_fraction": 0.2,
+  "perturbation_counts": {
+    "cherry_pick": 7,
+    "drop_seed_count": 13,
+    "metric_swap": 15,
+    "number_adjacent": 21,
+    "number_inflate": 20,
+    "omit_negative_conclusion": 6,
+    "overstate_effect": 14,
+    "positive_frame_null": 8,
+    "seed_count_inflate": 13,
+    "wrong_comparison": 3
+  },
+  "family_counts": {
+    "number": 54,
+    "seeds": 13,
+    "framing": 17,
+    "true_numbers": 36
+  },
+  "sneaky_rows_evading_rule_check": 36,
+  "sneaky_rows_evading_by_perturbation": {
+    "cherry_pick": 7,
+    "drop_seed_count": 0,
+    "metric_swap": 15,
+    "number_adjacent": 0,
+    "number_inflate": 0,
+    "omit_negative_conclusion": 6,
+    "overstate_effect": 0,
+    "positive_frame_null": 8,
+    "seed_count_inflate": 0,
+    "wrong_comparison": 0
+  },
+  "train_path": "data/findings_pvg_dataset.jsonl",
+  "heldout_path": "data/findings_pvg_heldout.jsonl"
+}

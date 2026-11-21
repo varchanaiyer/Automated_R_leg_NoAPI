@@ -88,3 +88,23 @@ def compute_human_checking_accuracy(human_eval_sessions: List[Dict]) -> Dict[str
         "helpful_n": helpful_total,
         "sneaky_n": sneaky_total,
     }
+
+
+def compute_auroc(scores: List[float], labels: List[bool]) -> float:
+    """
+    Area under the ROC curve for P(sound) scores against sound/unsound labels
+    (positive class = sound), by the rank/Mann-Whitney formulation with ties
+    counted as half. Returns 0.5 when one class is absent.
+    """
+    pos = [s for s, l in zip(scores, labels) if l]
+    neg = [s for s, l in zip(scores, labels) if not l]
+    if not pos or not neg:
+        return 0.5
+    wins = 0.0
+    for p in pos:
+        for n in neg:
+            if p > n:
+                wins += 1.0
+            elif p == n:
+                wins += 0.5
+    return wins / (len(pos) * len(neg))

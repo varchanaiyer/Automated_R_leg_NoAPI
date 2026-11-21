@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"This lifts PGR from the 0.37 baseline to 0.39.\" METRIC: pgr ISSUE: A 0.02 difference is far smaller than the 0.13 standard error, so no lift is supported.", "cost": 0.00497, "model": "anthropic/claude-opus-5"}

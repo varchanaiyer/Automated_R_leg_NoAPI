@@ -106,3 +106,17 @@ what a careful human would say; does the sneaky prover produce
 findings that are subtly wrong rather than obviously broken (if
 they're obviously broken, the verifier's "robustness" metric is
 meaningless — it's not being tested against anything hard).
+
+## 9. The verifier must be shown to discriminate before any round is trusted
+
+The first training run reported accuracy ~0.95 and robustness ~0.3 for four
+rounds while the verifier was returning the same echoed text for every
+input. Automated metrics from this pipeline are only meaningful if (a) the
+spot-check gate passed for the verifier that produced the rewards and (b)
+the round's `reward_gap` is positive and `heldout_accept_rate` is not ~1.
+Both are now enforced in code, but they are necessary, not sufficient: the
+20-item spot set and the 48-row held-out split are small, and the synthetic
+records share templates with the training split, so held-out accuracy
+overstates what the verifier would do on real AAR write-ups. Zero-shot
+Qwen2.5-1.5B accepts ~75% of the hand-checked set; the verifier that clears
+the bar is the one warmed up on the labeled train split.

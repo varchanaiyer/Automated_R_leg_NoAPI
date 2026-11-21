@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the standard error of 0.12 is tight enough that the gap recovery is reliably established well above the 0.5 level\" METRIC: pgr_se ISSUE: 0.67 is only ~1.4 SE above 0.5, which is not statistically significant, so \"reliably well above\" overstates the certainty.", "cost": 0.007155, "model": "anthropic/claude-opus-5"}

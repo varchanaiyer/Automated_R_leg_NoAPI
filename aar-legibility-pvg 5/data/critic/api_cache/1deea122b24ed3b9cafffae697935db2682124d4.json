@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"PGR of 0.98 (se 0.13)\" METRIC: pgr ISSUE: Reported PGR is 0.91, not 0.98.\nQUOTE: \"on multirc\" METRIC: n/a ISSUE: No dataset is given in the config or metrics, so the task attribution is unsupported.", "cost": 0.00765, "model": "anthropic/claude-opus-5"}

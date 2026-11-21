@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the shortfall is large enough to indicate a reliable degradation relative to baseline\" METRIC: pgr_se ISSUE: The 0.27 gap is under 2 standard errors (SE 0.14, 5 seeds) and the baseline has no reported error, so a reliable degradation cannot be claimed.", "cost": 0.008385, "model": "anthropic/claude-opus-5"}

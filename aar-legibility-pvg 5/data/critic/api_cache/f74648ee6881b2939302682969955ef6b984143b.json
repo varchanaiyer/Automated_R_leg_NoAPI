@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"PGR 0.44 (se 0.17)\" METRIC: num_seeds ISSUE: Fails to disclose that this is averaged over only 2 seeds, which with se 0.17 makes the estimate essentially uninformative.", "cost": 0.006245, "model": "anthropic/claude-opus-5"}

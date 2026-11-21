@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"transfer accuracy of 0.79\" METRIC: transfer_acc ISSUE: Transfer accuracy is 0.66; 0.79 is the strong-model ceiling accuracy.\nQUOTE: \"on sciq\" METRIC: n/a ISSUE: The config does not specify a dataset, so the sciq attribution is unsupported.", "cost": 0.00768, "model": "anthropic/claude-opus-5"}

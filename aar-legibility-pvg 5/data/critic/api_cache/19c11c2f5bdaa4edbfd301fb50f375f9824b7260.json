@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"recovered 0.38 of the performance gap\" METRIC: pgr ISSUE: pgr is 0.33, not 0.38.\nQUOTE: \"below the baseline PGR of 0.33\" METRIC: baseline_pgr ISSUE: PGR (0.33) equals the baseline, so it is not below it.", "cost": 0.006435, "model": "anthropic/claude-opus-5"}

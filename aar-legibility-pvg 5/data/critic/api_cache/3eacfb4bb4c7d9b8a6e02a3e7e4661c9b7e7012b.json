@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"This lifts PGR from the 0.37 baseline to 0.39\" METRIC: pgr ISSUE: The 0.02 gap is far smaller than the 0.13 standard error, so no improvement over baseline is supported.\nQUOTE: \"on sciq\" METRIC: n/a ISSUE: No dataset is given in the config or metrics, so the task attribution is unsupported.", "cost": 0.00758, "model": "anthropic/claude-opus-5"}

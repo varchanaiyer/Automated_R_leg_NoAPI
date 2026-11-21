@@ -1,0 +1,38 @@
+{
+  "verifier_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "results": {
+    "heldout": {
+      "rule_check": {
+        "n": 48,
+        "accuracy": 0.875,
+        "accept_rate": 0.625,
+        "auroc": 0.875,
+        "sneaky_reject_rate": 0.75,
+        "honest_false_reject_rate": 0.0,
+        "per_perturbation_reject_rate": {
+          "drop_seed_count": 1.0,
+          "metric_swap": 0.0,
+          "number_adjacent": 1.0,
+          "number_inflate": 1.0,
+          "overstate_effect": 1.0,
+          "positive_frame_null": 0.0,
+          "seed_count_inflate": 1.0,
+          "wrong_comparison": 1.0
+        }
+      }
+    },
+    "spot_check_set": {
+      "rule_check": {
+        "n": 20,
+        "accuracy": 0.85,
+        "accept_rate": 0.65,
+        "auroc": 0.85,
+        "sneaky_reject_rate": 0.7,
+        "honest_false_reject_rate": 0.0,
+        "per_perturbation_reject_rate": {
+          "unlabeled": 0.7
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"transfer accuracy 0.94\" METRIC: transfer_acc ISSUE: 0.94 is strong_acc; transfer_acc is 0.81.\nQUOTE: \"the gap is larger than two standard errors\" METRIC: baseline_pgr ISSUE: No standard error is reported for baseline_pgr, so the significance of the 0.19\u21920.63 gap cannot be established.", "cost": 0.009345, "model": "anthropic/claude-opus-5"}

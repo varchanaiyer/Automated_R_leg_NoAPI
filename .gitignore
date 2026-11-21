@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+aar-legibility-pvg 5/training/checkpoint/
+aar-legibility-pvg 5/training/pvg_round_history.jsonl
+aar-legibility-pvg 5/eval/human_eval_sessions/

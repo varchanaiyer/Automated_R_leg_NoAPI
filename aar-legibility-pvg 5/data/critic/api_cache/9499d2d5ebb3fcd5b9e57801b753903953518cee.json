@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the consistent ordering across seeds suggests temperature scaling provides a modest benefit\" METRIC: pgr_se ISSUE: No per-seed data is reported, so consistency across seeds is unsupported and contradicted by the 0.13 SE on a 0.02 difference.", "cost": 0.006555, "model": "anthropic/claude-opus-5"}

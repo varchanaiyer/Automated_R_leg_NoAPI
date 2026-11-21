@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"across 12 seeds\" METRIC: num_seeds ISSUE: Only 3 seeds were run, not 12.\nQUOTE: \"a significant improvement over the 0.25 baseline\" METRIC: pgr_se ISSUE: The 0.06 gain is well within the 0.11 standard error with 3 seeds, so no significance can be claimed.", "cost": 0.005125, "model": "anthropic/claude-opus-5"}

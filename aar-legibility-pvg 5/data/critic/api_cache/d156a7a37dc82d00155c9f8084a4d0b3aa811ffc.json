@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"The baseline PGR for direct weak-to-strong training is 0.\" METRIC: baseline_pgr ISSUE: Baseline PGR is 0.54, not 0, and the write-up thereby hides that the method's 0.47 PGR is below baseline.", "cost": 0.007295, "model": "anthropic/claude-opus-5"}

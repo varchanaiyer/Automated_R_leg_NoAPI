@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the self-distilled student reached a transfer accuracy of 0.92 (SE 0.05)\" METRIC: transfer_acc ISSUE: transfer_acc is 0.56, not 0.92 (0.92 is strong_acc).", "cost": 0.00603, "model": "anthropic/claude-opus-5"}

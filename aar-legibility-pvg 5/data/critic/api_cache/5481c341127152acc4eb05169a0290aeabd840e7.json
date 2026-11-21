@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the gap is larger than two standard errors\" METRIC: baseline_pgr ISSUE: No standard error is reported for the baseline PGR, so the significance of the 0.43 gap cannot be established from the given data.", "cost": 0.010185, "model": "anthropic/claude-opus-5"}

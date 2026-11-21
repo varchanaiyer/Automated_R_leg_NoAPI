@@ -9,15 +9,15 @@ findings the trained verifier scores as unsound, forcing the AAR to
 revise before a finding is accepted, the same way share_finding already
 rejects "result" findings with fewer than 5 seeds.
 
+Scoring is the same log-probability comparison training/pvg_loop.py uses
+(P(sound) = sigmoid(logp("SOUND") - logp("UNSOUND")) under the chat
+template). No free-text verdict is generated or parsed — the old substring
+parser is what accepted everything during the degenerate-verifier incident.
+
 Integration point (in the real repo):
     w2s_research/research_loop/tools/server_api_tools.py
     -> share_finding(), inside the `if finding_type == "result":` block,
-       right after the existing num_seeds check (~line 302-318 as of the
-       version reviewed for this project).
-
-To apply: copy the check below into that location, importing
-score_finding_with_verifier from this module (or inline the logic if you
-prefer to keep server_api_tools.py dependency-free of this repo).
+       right after the existing num_seeds check.
 """
 import json
 from pathlib import Path
@@ -27,40 +27,41 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import PVGConfig
 
+_LOADED_DIR: Optional[str] = None
+
 
 def render_verifier_prompt(summary: str, metrics: dict, config: dict) -> str:
-    from jinja2 import Template
-    template_path = Path(__file__).parent.parent / "prompts" / "verifier_prompt.jinja2"
-    with open(template_path, "r") as f:
-        template = Template(f.read())
-    return template.render(summary=summary, metrics=json.dumps(metrics), config=json.dumps(config))
+    from training.pvg_loop import _render_verifier_prompt
+    return _render_verifier_prompt(summary, metrics, config)
 
 
-def parse_verifier_verdict(text: str) -> Optional[float]:
-    normalized = text.strip().upper()
-    if "UNSOUND" in normalized:
-        return 0.0
-    if "SOUND" in normalized:
-        return 1.0
-    return None
+def _ensure_verifier(cfg: PVGConfig, verifier_dir: Optional[str]) -> None:
+    """Loads the trained adapter once (untrained base if no checkpoint is given)."""
+    global _LOADED_DIR
+    from training import pvg_loop
+    target = verifier_dir or cfg.trained_verifier_dir
+    if _LOADED_DIR == target:
+        return
+    if target and Path(target).exists():
+        pvg_loop.load_verifier_checkpoint(cfg, Path(target))
+    else:
+        print(f"[share_finding_gate] no trained verifier at {target!r}; using the untrained base model")
+        pvg_loop._get_verifier(cfg.verifier_model, cfg)
+    _LOADED_DIR = target
 
 
-async def score_finding_with_verifier(summary: str, metrics: dict, config: dict, cfg: PVGConfig) -> Optional[float]:
-    """
-    Calls the TRAINED verifier model (from training/pvg_loop.py's output,
-    not the base/untrained model) to score a real, live finding submission.
+def score_finding_with_verifier_sync(summary: str, metrics: dict, config: dict, cfg: PVGConfig,
+                                     verifier_dir: Optional[str] = None) -> Optional[float]:
+    """P(sound) from the trained verifier, or None if the verdict is unparseable."""
+    from training.pvg_loop import score_p_sound
+    _ensure_verifier(cfg, verifier_dir)
+    return score_p_sound(summary, metrics or {}, config or {}, cfg.verifier_model, cfg)
 
-    TODO: point this at wherever your trained verifier is served (a local
-    vLLM instance, a hosted endpoint, etc.) — this is intentionally left
-    unwired since it depends on how you deployed the verifier after
-    training completed.
-    """
-    prompt = render_verifier_prompt(summary, metrics, config)
-    raise NotImplementedError(
-        "Wire score_finding_with_verifier() to your trained, deployed "
-        "verifier model. See render_verifier_prompt()/parse_verifier_verdict() "
-        "for the expected prompt and response shape."
-    )
+
+async def score_finding_with_verifier(summary: str, metrics: dict, config: dict, cfg: PVGConfig,
+                                      verifier_dir: Optional[str] = None) -> Optional[float]:
+    """Async wrapper matching share_finding's call site."""
+    return score_finding_with_verifier_sync(summary, metrics, config, cfg, verifier_dir)
 
 
 # ---------------------------------------------------------------------------

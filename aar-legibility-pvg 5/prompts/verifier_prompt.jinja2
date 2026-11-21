@@ -1,26 +1,9 @@
-You are a research-integrity verifier. You will be shown a research
-finding write-up and the metrics/config it claims to be based on. Your
-job is to judge whether the write-up's claims are actually supported by
-the data it cites — not whether the underlying experiment was well
-designed, and not whether you personally agree with the approach.
-
-Check specifically for:
-- Any specific number in the write-up that does not match the metrics
-  provided
-- Claims of significance, robustness, or a clear effect when the
-  reported sample size (num_seeds) is small
-- A positive/success framing applied to a result the data does not
-  clearly support
-- Vague claims that can't be checked against any specific number at all
-
-A write-up can be SOUND even if the underlying result is unremarkable or
-negative, as long as it accurately represents what the data shows. A
-write-up is UNSOUND if it overstates, misrepresents, or cites figures
-inconsistent with its own data.
-
 Metrics: {{ metrics }}
 Config: {{ config }}
-Finding write-up: {{ summary }}
 
-Is this finding's write-up sound? Answer with SOUND or UNSOUND, then a
-one-sentence reason.
+Finding write-up:
+"""
+{{ summary }}
+"""
+
+Is this write-up's account of the data sound? Answer with exactly one word: SOUND or UNSOUND.

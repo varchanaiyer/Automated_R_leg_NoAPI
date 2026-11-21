@@ -1,0 +1,103 @@
+{
+  "seed": 42,
+  "counts": {
+    "template": 240,
+    "claude_honest": 120,
+    "claude_honest_rejected_by_rule_check": 0,
+    "claude_tampered": 109,
+    "claude_tamperer": 120,
+    "api_cost_usd": 3.074,
+    "hand": 20
+  },
+  "n_train": 439,
+  "n_heldout": 170,
+  "train": {
+    "template": {
+      "clean": 96,
+      "flawed": 83,
+      "kinds": {
+        "wrong_number": 42,
+        "omission": 15,
+        "overclaim": 17,
+        "misleading_framing": 6,
+        "false_comparison": 3
+      }
+    },
+    "claude_honest": {
+      "clean": 96,
+      "flawed": 0,
+      "kinds": {}
+    },
+    "claude_tampered": {
+      "clean": 0,
+      "flawed": 68,
+      "kinds": {
+        "overclaim": 23,
+        "wrong_number": 39,
+        "omission": 6
+      }
+    },
+    "claude_tamperer": {
+      "clean": 0,
+      "flawed": 96,
+      "kinds": {
+        "overclaim": 67,
+        "false_comparison": 13,
+        "omission": 15,
+        "wrong_number": 1
+      }
+    }
+  },
+  "heldout": {
+    "template": {
+      "clean": 24,
+      "flawed": 37,
+      "kinds": {
+        "misattributed_metric": 15,
+        "wrong_number": 12,
+        "overclaim": 5,
+        "omission": 4,
+        "misleading_framing": 1
+      }
+    },
+    "claude_honest": {
+      "clean": 24,
+      "flawed": 0,
+      "kinds": {}
+    },
+    "claude_tampered": {
+      "clean": 0,
+      "flawed": 41,
+      "kinds": {
+        "misattributed_metric": 26,
+        "overclaim": 3,
+        "wrong_number": 9,
+        "omission": 3
+      }
+    },
+    "claude_tamperer": {
+      "clean": 0,
+      "flawed": 24,
+      "kinds": {
+        "omission": 4,
+        "overclaim": 17,
+        "false_comparison": 2,
+        "wrong_number": 1
+      }
+    },
+    "hand": {
+      "clean": 10,
+      "flawed": 10,
+      "kinds": {
+        "wrong_number": 4,
+        "false_comparison": 1,
+        "misattributed_metric": 2,
+        "overclaim": 2,
+        "omission": 1
+      }
+    }
+  },
+  "holdout_type": "misattributed_metric (all such items are in heldout)",
+  "flawed_items_evading_rule_check": 137,
+  "flawed_items_total": 359
+}

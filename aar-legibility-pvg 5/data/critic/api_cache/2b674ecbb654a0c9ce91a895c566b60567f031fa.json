@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"This is a clearly reliable gain over the baseline.\" METRIC: pgr ISSUE: No baseline is in the data and PGR 0.2 \u00b1 0.11 does not support a reliable gain claim, contradicting the write-up's own earlier caveat.", "cost": 0.00565, "model": "anthropic/claude-opus-5"}

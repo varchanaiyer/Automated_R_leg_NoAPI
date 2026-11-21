@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"indicates the agreement-based selection recovers appreciably more of the gap than random or full-data training typically would\" METRIC: pgr ISSUE: No baseline PGR exists in the data, so any comparative claim of superiority is unsupported (and contradicts the write-up's own admission).", "cost": 0.005845, "model": "anthropic/claude-opus-5"}

@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"the weak-to-strong transfer accuracy was 0.85 with a standard error of 0.02\" METRIC: transfer_acc ISSUE: Transfer accuracy is 0.64; 0.85 is the strong model's ceiling.", "cost": 0.00613, "model": "anthropic/claude-opus-5"}

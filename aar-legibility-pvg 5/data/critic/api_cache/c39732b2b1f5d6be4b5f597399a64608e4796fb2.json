@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"on boolq\" METRIC: n/a ISSUE: The dataset is not specified anywhere in the config or metrics, so naming boolq is unsupported.", "cost": 0.006415, "model": "anthropic/claude-opus-5"}

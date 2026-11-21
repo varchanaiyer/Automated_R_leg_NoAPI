@@ -1,5 +1,52 @@
 # AAR Legibility via Prover-Verifier Games
 
+## Status (23 Sep 2026): verifier fixed, gates in, dataset grown — training re-run pending on Colab
+
+**What went wrong.** The verifier (Qwen2.5-1.5B-Instruct) was fed the raw
+prompt text with no chat template, so it *continued* the document instead
+of answering: both spot-check cases returned the prompt's own answer menu
+(`"SOUND - The write-up accurately reflects the data.\nUNSURE - ..."`), the
+substring parser found `SOUND` in that echo and accepted everything. Rounds
+1–4 of the first run (accuracy 0.75–1.00, robustness 0.15–0.40, sneaky
+reward > helpful reward) were noise and have been discarded.
+
+**What changed.**
+- `training/pvg_loop.py` — verdict = `sigmoid(logp("SOUND") - logp("UNSOUND"))`
+  under the chat template, one batched forward pass, no free text. Verifier
+  training is binary cross-entropy on that same logit. Prover prompts also go
+  through the chat template.
+- Spot-check **gate**: `run_one_round.py` / `pvg_loop.py` refuse to train
+  (exit 2) unless the two fixed cases split the right way and the verifier
+  that plays round 1 is >0.70 accurate with accept rate in [0.3, 0.7] on
+  `data/spot_check_set.jsonl` (20 hand-checked items).
+- Per-round **diagnostics** in `round_history.jsonl`: `unparseable_share`,
+  `heldout_accept_rate` / `heldout_accuracy` / `heldout_auroc`, `reward_gap`
+  (mean helpful P(sound) − mean sneaky P(sound)), role fidelity vs. the rule
+  check. A run **aborts itself** (exit 3) if held-out accept rate > 0.9 or
+  reward gap ≤ 0.
+- **Dataset**: `data/build_findings_dataset.py` builds 120 honest/sneaky
+  pairs (5 real + 115 synthetic weak-to-strong records), 20% held out *by
+  record* with seed 42, and records the perturbation behind every sneaky
+  row. ~40% of sneaky rows are true-numbers/misleading-framing cases the
+  rule check cannot catch.
+- **Baselines**: `eval/baselines.py` (rule check + zero-shot Qwen on the
+  held-out split). **Runs**: `run_experiment.py --seeds 42 43 44 --rounds 10`,
+  curves via `eval/plot_rounds.py`. Notebook: `notebooks/Experiments_v2.ipynb`.
+
+**24 Sep, first Colab run.** The gate refused: after warm-up the verifier
+ranked the spot set at AUROC 0.86 but accepted only 25-30% of it (threshold
+drift). Now: a scalar logit bias is calibrated on the train split after every
+verifier update and saved with the checkpoint; the verifier LoRA covers all
+linear layers; a third of synthetic records are sparse (pgr / se / seeds
+only) like the real findings and the spot-check cases.
+
+**Run order.**
+```
+python data/build_findings_dataset.py --target-pairs 120 --seed 42
+python eval/baselines.py
+python run_experiment.py --seeds 42 43 44 --rounds 10 --fresh
+```
+
 ## Goal
 
 Apply Kirchner et al.'s Prover-Verifier Game (PVG) method

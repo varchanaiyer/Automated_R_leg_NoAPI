@@ -1,0 +1,1 @@
+{"text": "QUOTE: \"Against the baseline PGR of 0.10 the improvement is more than two standard errors\" METRIC: baseline_pgr ISSUE: No standard error is reported for the baseline PGR, so a significance claim about the difference is not supported by the data.", "cost": 0.01073, "model": "anthropic/claude-opus-5"}
